@@ -6,11 +6,7 @@ const HOST = "0.0.0.0";
 
 // App
 const app = express();
-app.get("/", (req, res) {
-  res.send(' This is my Caltech PGP Capstone Project,')
-  res.send('Jose Pagan, 703-957-5737')
-  res.send('-- Hello World, Omar was here!!!');
-});
+app.get("/", (req, res) => res.send("Hello World!"));
 
 let server = app.listen(PORT, () => {
   console.log(`Running on http://${HOST}:${PORT}`);
