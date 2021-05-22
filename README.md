@@ -1,3 +1,89 @@
+# Caltech PGP Capstone Project (Demo Docker App)
+
+### Project hosted on Github Url: https://github.com/usridzero/capstone
+### Pre Install
+
+- Create Github repo
+- Create two AWS instances
+- Update instance OS packages
+- Create and assign Elastic IPs
+- Configure ssh connectivity between the two instances
+
+### Project structure
+This project contains:
+
+- aws-ec2 instances: used to host the jenkins master and slave which runs the docker container for the webapp
+- Jenkins: master and slave instances
+- Docker: container for the webapp
+- Github repo
+
+### Github repo:
+
+- connect to github using my account
+- create new repo called `capstone`
+- go to settings to configure the webhook
+
+```
+Payload URL
+http://34.233.81.121:8080/github-webhook/
+Content type
+
+application/json
+```
+- set the events that will trigger the webhook
+- activate the webhook
+
+### Installing Jenkins:
+
+- Connect to AWS instance for master:
+```
+>> ssh -i ~/.ssh/key.pem ubuntu@<ip-address>
+# sudo apt-get update
+# sudo apt-get install openjdk-11-jdk
+# sudo apt-get install jenkins
+# sudo systemctl enable jenkins
+```
+
+## Installing Docker and npm on slave instance:
+
+- Connect to AWS instance for jenkins slave:
+```
+>> ssh -i ~/.ssh/key.pem ubuntu@<ip-address>
+# sudo apt-get update
+# sudo apt-get upgrade
+# cd /opt/
+# sudo mkdir jenkins
+# cd jenkins
+# sudo chown -R ubuntu:ubuntu Jenkins
+# sudo apt-get install openjdk-11-jdk
+# sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release
+# echo   "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+	$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# sudo apt-get update
+# sudo apt-get install docker-ce docker-ce-cli containerd.io
+# vi /etc/docker/daemon.json
+	{"hosts": ["tcp://0.0.0.0:2375", "unix:///var/run/docker.sock"]}
+# sudo apt-get install npm
+# npm install
+```
+
+## Configure Jenkins:
+
+- Connect to Jenkins via graphical interface and configure the slave agent
+- Add additional plugins to Jenkins
+- Create Freestyle project
+
+### Git commits:
+
+- Using my own desktop cloned repo, update files, commit, and push to remote repo
+- A push will automatically trigger the webhook causing Jenkins to run the CI/CD pipeline
+
+### Testing the pipeline:
+
+- Once a git push is run it will trigger the webhook and run the pipeline
+
+### Original README.md from the webapp sample:
+
 # Demo Docker App
 
 This folder contains a Docker app that is meant to be used for demonstration
